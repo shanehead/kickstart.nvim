@@ -45,24 +45,6 @@ return {
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`
-    'folke/tokyonight.nvim',
-    priority = 1000, -- make sure to load this before all the other start plugins
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-
-      -- You can configure highlights by doing something like
-      --vim.cmd.hi 'Comment gui=none'
-    end,
-  },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   {
@@ -212,11 +194,6 @@ return {
       on_create = function(t)
         vim.opt.foldcolumn = '0'
         vim.opt.signcolumn = 'no'
-        local toggle = function()
-          t:toggle()
-        end
-        vim.keymap.set({ 'n', 't', 'i' }, "<C-'>", toggle, { desc = 'Toggle terminal', buffer = t.bufnr })
-        vim.keymap.set({ 'n', 't', 'i' }, '<F7>', toggle, { desc = 'Toggle terminal', buffer = t.bufnr })
       end,
       shading_factor = 2,
       direction = 'float',
@@ -232,5 +209,165 @@ return {
         pre_save_cmds = { 'Neotree close' },
       }
     end,
+  },
+  {
+    'olimorris/onedarkpro.nvim',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('onedarkpro').setup {
+        styles = {
+          comments = 'italic',
+          keywords = 'bold,italic',
+          functions = 'bold,italic',
+          parameters = 'bold',
+        },
+        colors = {
+          onedark_vivid = {
+            bg = '#0c121c',
+            -- telescope_prompt = "require('onedarkpro.helpers').darken('#0c121c', 1)",
+            -- telescope_results = "require('onedarkpro.helpers').darken('#0c121c', 1)",
+            -- telescope_preview = "require('onedarkpro.helpers').darken('#0c121c', 1)",
+            -- telescope_selection = "require('onedarkpro.helpers').darken('#0c121c', 1)",
+          },
+        },
+
+        -- highlights = {
+        --   -- Telescope
+        --   -- TelescopeBorder = {
+        --   --   fg = '${telescope_results}',
+        --   --   bg = '${telescope_results}',
+        --   -- },
+        --   TelescopePromptPrefix = {
+        --     fg = '${purple}',
+        --   },
+        --   TelescopePromptBorder = {
+        --     --fg = '${telescope_prompt}',
+        --     bg = '${telescope_prompt}',
+        --   },
+        --   TelescopePromptCounter = { fg = '${fg}' },
+        --   TelescopePromptNormal = { fg = '${fg}', bg = '${telescope_prompt}' },
+        --   TelescopePromptTitle = {
+        --     fg = '${telescope_prompt}',
+        --     bg = '${purple}',
+        --   },
+        --   TelescopePreviewTitle = {
+        --     fg = '${telescope_results}',
+        --     bg = '${green}',
+        --   },
+        --   TelescopeResultsTitle = {
+        --     fg = '${blue}',
+        --     bg = '${telescope_results}',
+        --   },
+        --   TelescopeMatching = { fg = '${blue}' },
+        --   TelescopeNormal = { bg = '${telescope_results}' },
+        --   TelescopeSelection = { fg = '${purple}', bg = '${telescope_selection}' },
+        --   TelescopePreviewNormal = { bg = '${telescope_preview}' },
+        --   -- TelescopePreviewBorder = { fg = '${telescope_preview}', bg = '${telescope_preview}' },
+        -- },
+        plugins = {
+          telescope = true,
+        },
+        -- highlights = {
+        --   ["@parameter"] = { fg = "${white}" },
+        -- },
+      }
+      vim.cmd 'colorscheme onedark_vivid'
+    end,
+  },
+  {
+    'epwalsh/obsidian.nvim',
+    -- the obsidian vault in this default config  ~/obsidian-vault
+    -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand':
+    -- event = { "bufreadpre " .. vim.fn.expand "~" .. "/my-vault/**.md" },
+    event = {
+      'BufReadPre ' .. vim.fn.expand '~' .. '/Documents/Obsidian/**.md',
+      'BufNewFile ' .. vim.fn.expand '~' .. '/Documents/Obsidian/**.md',
+    },
+    keys = {
+      {
+        'gf',
+        function()
+          if require('obsidian').util.cursor_on_markdown_link() then
+            return '<cmd>ObsidianFollowLink<CR>'
+          else
+            return 'gf'
+          end
+        end,
+        noremap = false,
+        expr = true,
+      },
+    },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'hrsh7th/nvim-cmp',
+      'nvim-telescope/telescope.nvim',
+    },
+    opts = {
+      dir = vim.env.HOME .. '/Documents/Obsidian', -- specify the vault location. no need to call 'vim.fn.expand' here
+      use_advanced_uri = true,
+      finder = 'telescope.nvim',
+      mappings = {},
+
+      templates = {
+        subdir = 'templates',
+        date_format = '%Y-%m-%d-%a',
+        time_format = '%H:%M',
+      },
+
+      note_frontmatter_func = function(note)
+        -- This is equivalent to the default frontmatter function.
+        local out = { id = note.id, aliases = note.aliases, tags = note.tags }
+        -- `note.metadata` contains any manually added fields in the frontmatter.
+        -- So here we just make sure those fields are kept in the frontmatter.
+        if note.metadata ~= nil and require('obsidian').util.table_length(note.metadata) > 0 then
+          for k, v in pairs(note.metadata) do
+            out[k] = v
+          end
+        end
+        return out
+      end,
+
+      follow_url_func = vim.ui.open,
+    },
+  },
+  {
+    'kdheepak/lazygit.nvim',
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
+    -- optional for floating window border decoration
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+  },
+  {
+    'echasnovski/mini.bufremove',
+    keys = {
+      {
+        '<leader>bd',
+        function()
+          local bd = require('mini.bufremove').delete
+          if vim.bo.modified then
+            local choice = vim.fn.confirm(('Save changes to %q?'):format(vim.fn.bufname()), '&Yes\n&No\n&Cancel')
+            if choice == 1 then -- Yes
+              vim.cmd.write()
+              bd(0)
+            elseif choice == 2 then -- No
+              bd(0, true)
+            end
+          else
+            bd(0)
+          end
+        end,
+        desc = 'Delete Buffer',
+      },
+      -- stylua: ignore
+      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+    },
   },
 }

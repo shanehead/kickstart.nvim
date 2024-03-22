@@ -1,12 +1,11 @@
 return {
   {
     'nvim-neotest/neotest',
-    ft = { 'go', 'rust', 'python' },
+    ft = { 'rust', 'python' },
     dependencies = {
+      'nvim-neotest/nvim-nio',
       'nvim-treesitter/nvim-treesitter',
-      'nvim-neotest/neotest-go',
       'nvim-neotest/neotest-python',
-      'rouge8/neotest-rust',
       {
         'folke/neodev.nvim',
         opts = {},
@@ -17,8 +16,6 @@ return {
         -- your neotest config here
         log_level = vim.log.levels.INFO,
         adapters = {
-          require 'neotest-go',
-          require 'neotest-rust',
           require 'neotest-python' {
             dap = { justMyCode = false },
           },

@@ -1,19 +1,28 @@
 local wk = require 'which-key'
 local gitlab = require 'gitlab'
 local builtin = require 'telescope.builtin'
+local icons = require('utils.icons').misc
 
 -- Normal
 local maps = {
   n = {
     ['<leader>q'] = { '<cmd>confirm qa<cr>', desc = 'Quit' },
 
+    ['<leader>w'] = { '<cmd>w<cr>', desc = 'Save' },
+    ['<leader>n'] = { '<cmd>enew<cr>', desc = 'New File' },
+    ['|'] = { '<cmd>vsplit<cr>', desc = 'Vertical Split' },
+    ['\\'] = { '<cmd>split<cr>', desc = 'Horizontal Split' },
+
     -- Buffers
-    ['<leader>b'] = { name = 'Buffers' },
+    ['<leader>b'] = { name = icons.Tab .. ' Buffers' },
+    ['<leader>c'] = { '<cmd>bdelete<cr>', desc = 'Close buffer' },
+    ['<leader>bc'] = { '<cmd>bd|e#<cr>', desc = 'Close other buffers' },
+    --['<leader>bb'] = { '<cmd>BufferLinePick<cr>', 'Pick Buffer' },
     ['<Tab>'] = { '<cmd>bnext<cr>', desc = 'Next buffer' },
     ['<S-Tab>'] = { '<cmd>bprevious<cr>', desc = 'Previous buffer' },
 
     -- Tabs
-    ['<leader>bt'] = { name = 'Tabs' },
+    ['<leader>bt'] = { name = icons.Tab .. ' Tabs' },
     ['<leader>btn'] = {
       function()
         vim.cmd.tabnext()
@@ -50,7 +59,7 @@ local maps = {
     ['<Char-0xAA>'] = { '<cmd>ToggleTerm<cr>', desc = 'Toggle terminal' },
 
     -- Testing
-    ['<leader>t'] = { name = 'Testing' },
+    ['<leader>t'] = { name = icons.Testing .. ' Testing' },
     ['<leader>ta'] = {
       function()
         require('neotest').run.run(vim.loop.cwd())
@@ -107,7 +116,7 @@ local maps = {
     },
 
     -- Debugging
-    ['<leader>d'] = { name = 'Debug' },
+    ['<leader>d'] = { name = icons.Debugger .. ' Debug' },
     ['<leader>dc'] = {
       function()
         require('neotest').run.run { strategy = 'dap' }
@@ -127,9 +136,12 @@ local maps = {
       desc = 'Start/Continue (F5)',
     },
 
+    -- git
+    ['<leader>g'] = { name = icons.Git .. ' Git' },
+    ['<leader>gg'] = { '<cmd>LazyGit<cr>', desc = 'LazyGit' },
+
     -- Gitlab
-    ['<leader>g'] = { name = 'Git' },
-    ['<leader>gl'] = { name = 'Gitlab' },
+    ['<leader>gl'] = { name = icons.GitLab .. ' Gitlab' },
     ['<leader>glr'] = { gitlab.review, desc = 'Gitlab MR review' },
     ['<leader>gls'] = { gitlab.summary, desc = 'Gitlab MR summary' },
     ['<leader>glA'] = { gitlab.approve, desc = 'Gitlab MR approve' },
@@ -144,7 +156,7 @@ local maps = {
     ['<leader>glo'] = { gitlab.open_in_browser, desc = 'Gitlab open in browser' },
 
     -- Markdown
-    ['<leader>m'] = { name = 'Markdown' },
+    ['<leader>m'] = { name = icons.Markdown .. ' Markdown' },
     ['<leader>mg'] = { ':Glow<cr>', desc = 'Markdown Glow' },
 
     -- Tmux navigator
@@ -162,15 +174,50 @@ local maps = {
     },
 
     -- Telescope
-    ['<leader>s'] = { name = 'Search' },
-    ['<leader>sh'] = { builtin.help_tags, desc = '[S]earch [H]elp' },
-    ['<leader>sk'] = { builtin.keymaps, desc = '[S]earch [K]eymaps' },
-    ['<leader>sf'] = { builtin.find_files, desc = '[S]earch [F]iles' },
-    ['<leader>sg'] = { builtin.live_grep, desc = '[S]earch by [G]rep' },
-    ['<leader>sd'] = { builtin.diagnostics, desc = '[S]earch [D]iagnostics' },
-    ['<leader>sr'] = { builtin.resume, desc = '[S]earch [R]esume' },
-    ['<leader>s.'] = { builtin.oldfiles, desc = '[S]earch Recent Files ("." for repeat)' },
-    ['<leader><leader>'] = { builtin.buffers, desc = '[ ] Find existing buffers' },
+    ['<leader>s'] = { name = icons.Spectre .. ' Search' },
+    ['<leader>sh'] = { builtin.help_tags, desc = 'Search Help' },
+    ['<leader>sk'] = { builtin.keymaps, desc = 'Search Keymaps' },
+    ['<leader>sf'] = { builtin.find_files, desc = 'Search Files' },
+    ['<leader>sg'] = { builtin.live_grep, desc = 'Search by Grep' },
+    ['<leader>sd'] = { builtin.diagnostics, desc = 'Search Diagnostics' },
+    ['<leader>sr'] = { builtin.resume, desc = 'Search Resume' },
+    ['<leader>s.'] = { builtin.oldfiles, desc = 'Search Recent Files ("." for repeat)' },
+    --['<leader><leader>'] = { builtin.buffers, desc = '[ ] Find existing buffers' },
+    ['<leader>f'] = { name = icons.Search .. ' Find' },
+    ['<leader>fb'] = {
+      function()
+        require('telescope.builtin').buffers()
+      end,
+      desc = 'Find buffers',
+    },
+    ['<leader>ff'] = {
+      function()
+        require('telescope.builtin').find_files()
+      end,
+      desc = 'Find files',
+    },
+    ['<leader>fF'] = {
+      function()
+        require('telescope.builtin').find_files { hidden = true, no_ignore = true }
+      end,
+      desc = 'Find all files',
+    },
+    ['<leader>fw'] = {
+      function()
+        require('telescope.builtin').live_grep()
+      end,
+      desc = 'Find words',
+    },
+    ['<leader>fW'] = {
+      function()
+        require('telescope.builtin').live_grep {
+          additional_args = function(args)
+            return vim.list_extend(args, { '--hidden', '--no-ignore' })
+          end,
+        }
+      end,
+      desc = 'Find words in all files',
+    },
 
     -- Slightly advanced example of overriding default behavior and theme
     ['<leader>/'] = {
@@ -197,7 +244,7 @@ local maps = {
     },
 
     -- Spectre
-    ['<leader>ss'] = { name = 'Spectre' },
+    ['<leader>ss'] = { name = icons.Spectre .. ' Spectre' },
     ['<leader>sss'] = {
       function()
         require('spectre').toggle()
@@ -212,7 +259,7 @@ local maps = {
     },
 
     -- Rust
-    ['<leader>r'] = { name = 'Rust' },
+    ['<leader>r'] = { name = icons.Rust .. ' Rust' },
     ['<leader>rr'] = { '<cmd>RustRun!<cr>', desc = 'Run Current Rust file' },
   },
 

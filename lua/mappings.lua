@@ -9,7 +9,6 @@ local maps = {
     ['<leader>q'] = { '<cmd>confirm qa<cr>', desc = 'Quit' },
 
     ['<leader>w'] = { '<cmd>w<cr>', desc = 'Save' },
-    ['<leader>n'] = { '<cmd>enew<cr>', desc = 'New File' },
     ['|'] = { '<cmd>vsplit<cr>', desc = 'Vertical Split' },
     ['\\'] = { '<cmd>split<cr>', desc = 'Horizontal Split' },
 
@@ -136,7 +135,7 @@ local maps = {
       desc = 'Start/Continue (F5)',
     },
 
-    -- git
+    -- Git
     ['<leader>g'] = { name = icons.Git .. ' Git' },
     ['<leader>gg'] = { '<cmd>LazyGit<cr>', desc = 'LazyGit' },
 
@@ -261,6 +260,14 @@ local maps = {
     -- Rust
     ['<leader>r'] = { name = icons.Rust .. ' Rust' },
     ['<leader>rr'] = { '<cmd>RustRun!<cr>', desc = 'Run Current Rust file' },
+
+    -- Notes
+    ['<leader>n'] = { name = icons.Note .. ' Notes' },
+    ['<leader>nt'] = { '<Esc>i- [ ] ', desc = 'Todo Checkbox' },
+
+    -- Lsp
+    ['<leader>l'] = { name = icons.ActiveLSP .. ' LSP' },
+    ['<leader>ld'] = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
   },
 
   -- Terminal

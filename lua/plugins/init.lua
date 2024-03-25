@@ -232,39 +232,43 @@ return {
           },
         },
 
-        -- highlights = {
-        --   -- Telescope
-        --   -- TelescopeBorder = {
-        --   --   fg = '${telescope_results}',
-        --   --   bg = '${telescope_results}',
-        --   -- },
-        --   TelescopePromptPrefix = {
-        --     fg = '${purple}',
-        --   },
-        --   TelescopePromptBorder = {
-        --     --fg = '${telescope_prompt}',
-        --     bg = '${telescope_prompt}',
-        --   },
-        --   TelescopePromptCounter = { fg = '${fg}' },
-        --   TelescopePromptNormal = { fg = '${fg}', bg = '${telescope_prompt}' },
-        --   TelescopePromptTitle = {
-        --     fg = '${telescope_prompt}',
-        --     bg = '${purple}',
-        --   },
-        --   TelescopePreviewTitle = {
-        --     fg = '${telescope_results}',
-        --     bg = '${green}',
-        --   },
-        --   TelescopeResultsTitle = {
-        --     fg = '${blue}',
-        --     bg = '${telescope_results}',
-        --   },
-        --   TelescopeMatching = { fg = '${blue}' },
-        --   TelescopeNormal = { bg = '${telescope_results}' },
-        --   TelescopeSelection = { fg = '${purple}', bg = '${telescope_selection}' },
-        --   TelescopePreviewNormal = { bg = '${telescope_preview}' },
-        --   -- TelescopePreviewBorder = { fg = '${telescope_preview}', bg = '${telescope_preview}' },
-        -- },
+        highlights = {
+          --   -- Telescope
+          --   -- TelescopeBorder = {
+          --   --   fg = '${telescope_results}',
+          --   --   bg = '${telescope_results}',
+          --   -- },
+          --   TelescopePromptPrefix = {
+          --     fg = '${purple}',
+          --   },
+          --   TelescopePromptBorder = {
+          --     --fg = '${telescope_prompt}',
+          --     bg = '${telescope_prompt}',
+          --   },
+          --   TelescopePromptCounter = { fg = '${fg}' },
+          --   TelescopePromptNormal = { fg = '${fg}', bg = '${telescope_prompt}' },
+          TelescopePromptTitle = {
+            fg = '${purple}',
+            bold = true,
+            --     bg = '${purple}',
+          },
+          TelescopePreviewTitle = {
+            fg = '${purple}',
+            bold = true,
+
+            --     bg = '${green}',
+          },
+          TelescopeResultsTitle = {
+            fg = '${purple}',
+            bold = true,
+            --     bg = '${telescope_results}',
+          },
+          --   TelescopeMatching = { fg = '${blue}' },
+          --   TelescopeNormal = { bg = '${telescope_results}' },
+          --   TelescopeSelection = { fg = '${purple}', bg = '${telescope_selection}' },
+          --   TelescopePreviewNormal = { bg = '${telescope_preview}' },
+          --   -- TelescopePreviewBorder = { fg = '${telescope_preview}', bg = '${telescope_preview}' },
+        },
         plugins = {
           telescope = true,
         },

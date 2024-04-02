@@ -50,6 +50,7 @@ return {
         auto_reload = true,
         lang = {
           python = {
+            -- todo: Get from pyproject.toml if present
             coverage_file = './build/coverage',
             --coverage_command = "coverage json --data-file=./build/coverage -q -o -",
           },

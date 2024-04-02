@@ -2,7 +2,7 @@ local function get_telescope_opts(state, path)
   return {
     cwd = path,
     search_dirs = { path },
-    attach_mappings = function(prompt_bufnr, map)
+    attach_mappings = function(prompt_bufnr, _)
       local actions = require 'telescope.actions'
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
@@ -13,7 +13,7 @@ local function get_telescope_opts(state, path)
           filename = selection[1]
         end
         -- any way to open the file without triggering auto-close event of neo-tree?
-        require('neo-tree.sources.filesystem').navigate(state, state.path, filename)
+        require('neo-tree.sources.filesystem').navigate(state, state.path, filename, function() end)
       end)
       return true
     end,
@@ -203,8 +203,7 @@ return {
         WinBarNC = { link = 'WinBarNC' },
       },
       size = 10,
-      ---@param t Terminal
-      on_create = function(t)
+      on_create = function()
         vim.opt.foldcolumn = '0'
         vim.opt.signcolumn = 'no'
       end,
@@ -217,6 +216,7 @@ return {
     'rmagatti/auto-session',
     config = function()
       require('auto-session').setup {
+        log_level = 'error',
         auto_save_eanbled = true,
         auto_restore_enabled = true,
         pre_save_cmds = { 'Neotree close' },
@@ -515,8 +515,8 @@ return {
     'folke/flash.nvim',
     event = 'VeryLazy',
     opts = {},
-  	-- stylua: ignore
-  	keys = {
+		-- stylua: ignore
+		keys = {
 			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
 			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
 			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },

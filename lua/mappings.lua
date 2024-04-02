@@ -119,12 +119,14 @@ local maps = {
     ['<leader>d'] = { name = icons.Debugger .. ' Debug' },
     ['<leader>dc'] = {
       function()
+        ---@diagnostic disable-next-line: missing-fields
         require('neotest').run.run { strategy = 'dap' }
       end,
       desc = 'Debug nearest test',
     },
     ['<leader>dr'] = {
       function()
+        ---@diagnostic disable-next-line: missing-fields
         require('neotest').run.run_last { strategy = 'dap' }
       end,
       desc = 'Debug last test',

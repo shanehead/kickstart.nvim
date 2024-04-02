@@ -36,7 +36,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 -- Sets how neovim will display certain whitespace in the editor.
-vim.opt.list = true
+--vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
@@ -55,3 +55,7 @@ vim.opt.hlsearch = true
 vim.opt.laststatus = 3
 
 vim.opt.termguicolors = true
+vim.opt.conceallevel = 2
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.shortmess = 'aoOstTWIcCF'

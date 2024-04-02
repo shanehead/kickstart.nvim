@@ -6,6 +6,8 @@ local icons = require('utils.icons').misc
 -- Normal
 local maps = {
   n = {
+    ['gb'] = { '<C-t>', desc = 'Go Back (Previous Tag)' },
+
     ['<leader>q'] = { '<cmd>confirm qa<cr>', desc = 'Quit' },
 
     ['<leader>w'] = { '<cmd>w<cr>', desc = 'Save' },
@@ -14,7 +16,6 @@ local maps = {
 
     -- Buffers
     ['<leader>b'] = { name = icons.Tab .. ' Buffers' },
-    ['<leader>c'] = { '<cmd>bdelete<cr>', desc = 'Close buffer' },
     ['<leader>bc'] = { '<cmd>bd|e#<cr>', desc = 'Close other buffers' },
     --['<leader>bb'] = { '<cmd>BufferLinePick<cr>', 'Pick Buffer' },
     ['<Tab>'] = { '<cmd>bnext<cr>', desc = 'Next buffer' },
@@ -158,11 +159,11 @@ local maps = {
     ['<leader>m'] = { name = icons.Markdown .. ' Markdown' },
     ['<leader>mg'] = { ':Glow<cr>', desc = 'Markdown Glow' },
 
-    -- Tmux navigator
-    ['<C-h>'] = { '<cmd>TmuxNavigateLeft<cr>', desc = 'Move to left split' },
-    ['<C-j>'] = { '<cmd>TmuxNavigateDown<cr>', desc = 'Move to below split' },
-    ['<C-k>'] = { '<cmd>TmuxNavigateUp<cr>', desc = 'Move to above split' },
-    ['<C-l>'] = { '<cmd>TmuxNavigateRight<cr>', desc = 'Move to right split' },
+    -- Navigator
+    ['<C-h>'] = { '<cmd>NavigatorLeft<cr>', desc = 'Move to left split' },
+    ['<C-j>'] = { '<cmd>NavigatorDown<cr>', desc = 'Move to below split' },
+    ['<C-k>'] = { '<cmd>NavigatorUp<cr>', desc = 'Move to above split' },
+    ['<C-l>'] = { '<cmd>NavigatorRight<cr>', desc = 'Move to right split' },
 
     -- Emoji
     ['<leader><leader>i'] = {
@@ -268,6 +269,9 @@ local maps = {
     -- Lsp
     ['<leader>l'] = { name = icons.ActiveLSP .. ' LSP' },
     ['<leader>ld'] = { vim.diagnostic.open_float, desc = 'Hover diagnostics' },
+
+    -- Trouble
+    ['<leader>x'] = { name = icons.Trouble .. '  Trouble' },
   },
 
   -- Terminal

@@ -22,7 +22,7 @@ end
 
 return {
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',    opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -37,16 +37,34 @@ return {
     },
   },
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
+      require('which-key').setup {
+        icons = {
+          group = '', -- symbol prepended to a group
+        },
+        window = {
+          winblend = 5,
+        },
+      }
     end,
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      signs = true,
+      keywords = {
+        TODO = { alt = { 'todo' } },
+        NOTE = { alt = { 'note' } },
+      },
+    },
+  },
   {
     'harrisoncramer/gitlab.nvim',
     dependencies = {
@@ -64,11 +82,6 @@ return {
         debug = { go_request = false, go_response = false }, -- Which values to log
       }
     end,
-  },
-  {
-    'christoomey/vim-tmux-navigator',
-    lazy = false,
-    event = 'BufReadPre',
   },
   {
     'allaman/emoji.nvim',
@@ -285,8 +298,11 @@ return {
     -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand':
     -- event = { "bufreadpre " .. vim.fn.expand "~" .. "/my-vault/**.md" },
     event = {
+
       'BufReadPre ' .. vim.fn.expand '~' .. '/Documents/Obsidian/**.md',
       'BufNewFile ' .. vim.fn.expand '~' .. '/Documents/Obsidian/**.md',
+      'BufReadPre ' .. vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian/**.md',
+      'BufNewFile ' .. vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian/**.md',
     },
     keys = {
       {
@@ -308,7 +324,8 @@ return {
       'nvim-telescope/telescope.nvim',
     },
     opts = {
-      dir = vim.env.HOME .. '/Documents/Obsidian', -- specify the vault location. no need to call 'vim.fn.expand' here
+      --dir = vim.env.HOME .. '/Documents/Obsidian', -- specify the vault location. no need to call 'vim.fn.expand' here
+      dir = vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian',
       use_advanced_uri = true,
       finder = 'telescope.nvim',
       mappings = {},
@@ -317,6 +334,45 @@ return {
         subdir = 'templates',
         date_format = '%Y-%m-%d-%a',
         time_format = '%H:%M',
+      },
+      ui = {
+        enable = true, -- set to false to disable all additional syntax features
+        update_debounce = 200, -- update delay after a text change (in milliseconds)
+        -- Define how various check-boxes are displayed
+        checkboxes = {
+          -- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
+          [' '] = { char = '󰄱', hl_group = 'ObsidianTodo' },
+          ['x'] = { char = '', hl_group = 'ObsidianDone' },
+          ['>'] = { char = '', hl_group = 'ObsidianRightArrow' },
+          ['~'] = { char = '󰰱', hl_group = 'ObsidianTilde' },
+          -- Replace the above with this if you don't have a patched font:
+          -- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
+          -- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
+
+          -- You can also add more custom ones...
+        },
+        -- Use bullet marks for non-checkbox lists.
+        bullets = { char = '•', hl_group = 'ObsidianBullet' },
+        external_link_icon = { char = '', hl_group = 'ObsidianExtLinkIcon' },
+        -- Replace the above with this if you don't have a patched font:
+        -- external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
+        reference_text = { hl_group = 'ObsidianRefText' },
+        highlight_text = { hl_group = 'ObsidianHighlightText' },
+        tags = { hl_group = 'ObsidianTag' },
+        block_ids = { hl_group = 'ObsidianBlockID' },
+        hl_groups = {
+          -- The options are passed directly to `vim.api.nvim_set_hl()`. See `:help nvim_set_hl`.
+          ObsidianTodo = { bold = true, fg = '#f78c6c' },
+          ObsidianDone = { bold = true, fg = '#89ddff' },
+          ObsidianRightArrow = { bold = true, fg = '#f78c6c' },
+          ObsidianTilde = { bold = true, fg = '#ff5370' },
+          ObsidianBullet = { bold = true, fg = '#89ddff' },
+          ObsidianRefText = { underline = true, fg = '#c792ea' },
+          ObsidianExtLinkIcon = { fg = '#c792ea' },
+          ObsidianTag = { italic = true, fg = '#89ddff' },
+          ObsidianBlockID = { italic = true, fg = '#89ddff' },
+          ObsidianHighlightText = { bg = '#75662e' },
+        },
       },
 
       note_frontmatter_func = function(note)
@@ -353,7 +409,7 @@ return {
     'echasnovski/mini.bufremove',
     keys = {
       {
-        '<leader>bd',
+        '<leader>c',
         function()
           local bd = require('mini.bufremove').delete
           if vim.bo.modified then
@@ -370,8 +426,197 @@ return {
         end,
         desc = 'Delete Buffer',
       },
-      -- stylua: ignore
-      { "<leader>bD", function() require("mini.bufremove").delete(0, true) end, desc = "Delete Buffer (Force)" },
+      {
+        '<leader>bD',
+        function()
+          require('mini.bufremove').delete(0, true)
+        end,
+        desc = 'Delete Buffer (Force)',
+      },
     },
+  },
+  {
+    'SmiteshP/nvim-navic',
+    dependencies = { 'neovim/nvim-lspconfig' },
+    config = function()
+      require('nvim-navic').setup {
+        lsp = {
+          auto_attach = true,
+        },
+      }
+    end,
+  },
+  -- {
+  --   'echasnovski/mini.surround',
+  --   version = false,
+  --   config = function()
+  --     require('mini.surround').setup {
+  --       -- These are the default mappings
+  --       mappings = {
+  --         add = 'sa', -- Add surrounding in Normal and Visual modes
+  --         delete = 'sd', -- Delete surrounding
+  --         find = 'sf', -- Find surrounding (to the right)
+  --         find_left = 'sF', -- Find surrounding (to the left)
+  --         highlight = 'sh', -- Highlight surrounding
+  --         replace = 'sr', -- Replace surrounding
+  --         update_n_lines = 'sn', -- Update `n_lines`
+  --
+  --         suffix_last = 'l', -- Suffix to search with "prev" method
+  --         suffix_next = 'n', -- Suffix to search with "next" method
+  --       },
+  --     }
+  --   end,
+  -- },
+  {
+    'numToStr/Navigator.nvim',
+    config = function()
+      require('Navigator').setup {
+        mux = 'auto',
+      }
+    end,
+  },
+  { -- Autoformat
+    'stevearc/conform.nvim',
+    lazy = false,
+    keys = {
+      {
+        '<leader>lf',
+        function()
+          require('conform').format { async = true, lsp_fallback = true }
+        end,
+        mode = '',
+        desc = 'Format buffer',
+      },
+    },
+    opts = {
+      notify_on_error = false,
+      format_on_save = function(bufnr)
+        -- Disable "format_on_save lsp_fallback" for languages that don't
+        -- have a well standardized coding style. You can add additional
+        -- languages here or re-enable it for the disabled ones.
+        local disable_filetypes = { c = true, cpp = true }
+        return {
+          timeout_ms = 500,
+          lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+        }
+      end,
+      formatters_by_ft = {
+        lua = { 'stylua' },
+        -- Conform can also run multiple formatters sequentially
+        -- python = { "isort", "black" },
+        --
+        -- You can use a sub-list to tell conform to run *until* a formatter
+        -- is found.
+        -- javascript = { { "prettierd", "prettier" } },
+      },
+    },
+  },
+  {
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    opts = {},
+  	-- stylua: ignore
+  	keys = {
+			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+			{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+			{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+		},
+  },
+  {
+    'folke/trouble.nvim',
+    branch = 'dev', -- IMPORTANT!
+    keys = {
+      {
+        '<leader>xx',
+        '<cmd>Trouble diagnostics toggle<cr>',
+        desc = 'Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xX',
+        '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+        desc = 'Buffer Diagnostics (Trouble)',
+      },
+      {
+        '<leader>xs',
+        '<cmd>Trouble symbols toggle focus=false<cr>',
+        desc = 'Symbols (Trouble)',
+      },
+      {
+        '<leader>xl',
+        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        desc = 'LSP Definitions / references / ... (Trouble)',
+      },
+      {
+        '<leader>xL',
+        '<cmd>Trouble loclist toggle<cr>',
+        desc = 'Location List (Trouble)',
+      },
+      {
+        '<leader>xQ',
+        '<cmd>Trouble qflist toggle<cr>',
+        desc = 'Quickfix List (Trouble)',
+      },
+    },
+    opts = {}, -- for default options, refer to the configuration section for custom setup.
+  },
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      lsp = {
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+          ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
+        },
+      },
+      cmdline = {
+        enabled = true,
+        view = 'cmdline',
+      },
+
+      routes = {
+        {
+          filter = {
+            any = {
+              { event = 'msg_show', kind = '' },
+              { event = 'msg_show', find = 'E486' },
+            },
+          },
+          opts = { skip = true },
+        },
+      },
+
+      -- you can enable a preset for easier configuration
+      presets = {
+        bottom_search = true, -- use a classic bottom cmdline for search
+        command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = true, -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = true, -- add a border to hover docs and signature help
+      },
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
+  },
+  {
+    'windwp/nvim-autopairs',
+    dependencies = { 'hrsh7th/nvim-cmp' },
+    config = function()
+      require('nvim-autopairs').setup {}
+      -- If you want to automatically add `(` after selecting a function or method
+      local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+      local cmp = require 'cmp'
+      cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
   },
 }

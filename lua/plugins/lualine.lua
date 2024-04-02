@@ -81,7 +81,7 @@ return {
           lualine_x = {
             {
               'diagnostics',
-              symbols = { error = icons.DiagnosticError, warn = icons.DiagnosticWarn, info = icons.DiagnosticInfo, hint = icons.DiagnosticHint },
+              symbols = { error = icons.DiagnosticError .. ' ', warn = icons.DiagnosticWarn .. ' ', info = icons.DiagnosticInfo .. ' ', hint = icons.DiagnosticHint .. ' ' },
               update_in_insert = true,
             },
           },
@@ -122,6 +122,7 @@ return {
     'b0o/incline.nvim',
     event = 'VeryLazy',
     config = function()
+      local navic = require 'nvim-navic'
       require('incline').setup {
         window = {
           padding = { left = 0, right = 0 },
@@ -178,6 +179,17 @@ return {
             { (ft_icon and ' ' .. ft_icon or '') .. ' ', guifg = ft_color, guibg = colors.blue },
             { filename .. ' ',                           gui = modified,   guifg = colors.bg,  guibg = colors.blue },
           }
+
+          if props.focused then
+            for _, item in ipairs(navic.get_data(props.buf) or {}) do
+              table.insert(buffer, {
+                { ' > ',     group = 'NavicSeparator' },
+                { item.icon, group = 'NavicIcons' .. item.type },
+                { item.name, group = 'NavicText' },
+              })
+            end
+          end
+
           return buffer
         end,
       }

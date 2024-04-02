@@ -6,6 +6,7 @@ local lspkind_opts = {
   symbol_map = icons,
   menu = {
     nvim_lsp = '(LSP)',
+    codeium = '(Codeium)',
     ultisnips = '(US)',
     nvim_lua = '(Lua)',
     path = '(Path)',
@@ -55,6 +56,12 @@ return { -- Autocompletion
             require('luasnip').config.setup(opts)
           end
         end,
+      },
+      {
+        'Exafunction/codeium.nvim',
+        cmd = 'Codeium',
+        build = ':Codeium Auth',
+        opts = {},
       },
       'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-buffer',
@@ -147,6 +154,7 @@ return { -- Autocompletion
         sources = {
           { name = 'nvim_lsp' },
           { name = 'nvim_lsp_signature_help' },
+          { name = 'codeium' },
           { name = 'luasnip' },
           { name = 'buffer' },
           { name = 'path' },

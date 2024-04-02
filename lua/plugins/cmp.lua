@@ -26,7 +26,7 @@ local hlgroups = {
   CmpSel = { bg = colors.selection, bold = true },
 }
 
-return { -- Autocompletion
+return {
   {
     'onsails/lspkind.nvim',
     lazy = true,
@@ -43,8 +43,7 @@ return { -- Autocompletion
       {
         'L3MON4D3/LuaSnip',
         lazy = true,
-        build = vim.fn.has 'win32' == 0 and
-        "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp" or nil,
+        build = vim.fn.has 'win32' == 0 and "echo 'NOTE: jsregexp is optional, so not a big deal if it fails to build\n'; make install_jsregexp" or nil,
         dependencies = { 'rafamadriz/friendly-snippets' },
         opts = {
           history = true,
@@ -113,7 +112,6 @@ return { -- Autocompletion
           completion = {
             border = border 'CmpBorder',
             side_padding = 1,
-            winhighlight = 'Normal:CmpPmenu,CursorLine:CmpSel,Search:None',
             scrollbar = false,
           },
           documentation = {

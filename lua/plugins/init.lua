@@ -284,6 +284,15 @@ return {
         },
         plugins = {
           telescope = true,
+          nvim_cmp = true,
+          lsp_semantic_tokens = true,
+          neotest = true,
+          neo_tree = true,
+          nvim_dap = true,
+          nvim_dap_ui = true,
+          nvim_lsp = true,
+          trouble = true,
+          which_key = true,
         },
         -- highlights = {
         --   ["@parameter"] = { fg = "${white}" },
@@ -617,6 +626,12 @@ return {
       local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
       local cmp = require 'cmp'
       cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
+    end,
+  },
+  {
+    'norcalli/nvim-colorizer.lua',
+    config = function()
+      require('colorizer').setup()
     end,
   },
 }

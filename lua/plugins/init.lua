@@ -283,6 +283,7 @@ return {
           --   -- TelescopePreviewBorder = { fg = '${telescope_preview}', bg = '${telescope_preview}' },
         },
         plugins = {
+          -- todo: Not sure this is really needed, I think these are on by default
           telescope = true,
           nvim_cmp = true,
           lsp_semantic_tokens = true,
@@ -526,10 +527,6 @@ return {
     opts = {},
 		-- stylua: ignore
 		keys = {
-			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-			{ "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
 			{ "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
 		},
   },
@@ -593,6 +590,8 @@ return {
             any = {
               { event = 'msg_show', kind = '' },
               { event = 'msg_show', find = 'E486' },
+              { event = 'msg_show', find = 'line less' },
+              { event = 'msg_show', find = 'yanked' },
             },
           },
           opts = { skip = true },

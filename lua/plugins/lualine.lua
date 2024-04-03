@@ -1,4 +1,3 @@
--- todo: use standard icons
 local icons = require('utils.icons').misc
 local colors = require('onedarkpro.helpers').get_colors()
 
@@ -81,7 +80,12 @@ return {
           lualine_x = {
             {
               'diagnostics',
-              symbols = { error = icons.DiagnosticError .. ' ', warn = icons.DiagnosticWarn .. ' ', info = icons.DiagnosticInfo .. ' ', hint = icons.DiagnosticHint .. ' ' },
+              symbols = {
+                error = icons.DiagnosticError .. ' ',
+                warn = icons.DiagnosticWarn .. ' ',
+                info = icons.DiagnosticInfo .. ' ',
+                hint = icons.DiagnosticHint .. ' ',
+              },
               update_in_insert = true,
             },
           },
@@ -108,7 +112,7 @@ return {
               symbols = { alternate_file = '' },
               buffers_color = {
                 -- Same values as the general color option can be used here.
-                active = 'lualine_a_insert',     -- Color for active buffer.
+                active = 'lualine_a_insert', -- Color for active buffer.
                 inactive = 'lualine_b_inactive', -- Color for inactive buffer.
               },
             },
@@ -177,13 +181,13 @@ return {
             { get_diagnostic_label() },
             { get_git_diff() },
             { (ft_icon and ' ' .. ft_icon or '') .. ' ', guifg = ft_color, guibg = colors.blue },
-            { filename .. ' ',                           gui = modified,   guifg = colors.bg,  guibg = colors.blue },
+            { filename .. ' ', gui = modified, guifg = colors.bg, guibg = colors.blue },
           }
 
           if props.focused then
             for _, item in ipairs(navic.get_data(props.buf) or {}) do
               table.insert(buffer, {
-                { ' > ',     group = 'NavicSeparator' },
+                { ' > ', group = 'NavicSeparator' },
                 { item.icon, group = 'NavicIcons' .. item.type },
                 { item.name, group = 'NavicText' },
               })

@@ -93,46 +93,9 @@ return { -- LSP Configuration & Plugins
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
+        -- Not including rust-analyzer so that we use system version instead of Mason
         ruff_lsp = {},
-        rust_analyzer = {
-          settings = {
-            ['rust-analyzer'] = {
-              checkOnSave = {
-                command = 'clippy',
-              },
-              assist = {
-                importEnforceGranularity = true,
-                importPrefix = 'crate',
-              },
-              completion = {
-                postfix = {
-                  enable = false,
-                },
-              },
-              inlayHints = {
-                lifetimeElisionHints = {
-                  enable = true,
-                  useParameterNames = true,
-                },
-              },
-            },
-          },
-        },
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        --
-        -- Some languages (like typescript) have entire language plugins that can be useful:
-        --    https://github.com/pmizio/typescript-tools.nvim
-        --
-        -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
-        --
-
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes { ...},
-          -- capabilities = {},
           settings = {
             Lua = {
               completion = {
@@ -159,7 +122,6 @@ return { -- LSP Configuration & Plugins
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
         'ruff_lsp',
-        'rust_analyzer',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

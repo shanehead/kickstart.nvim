@@ -274,6 +274,7 @@ local maps = {
 
     -- Trouble
     ['<leader>x'] = { name = icons.Trouble .. '  Trouble' },
+    -- The rest are defined in plugin spec
   },
 
   -- Terminal

@@ -238,49 +238,22 @@ return {
         colors = {
           onedark_vivid = {
             bg = '#0c121c',
-            -- telescope_prompt = "require('onedarkpro.helpers').darken('#0c121c', 1)",
-            -- telescope_results = "require('onedarkpro.helpers').darken('#0c121c', 1)",
-            -- telescope_preview = "require('onedarkpro.helpers').darken('#0c121c', 1)",
-            -- telescope_selection = "require('onedarkpro.helpers').darken('#0c121c', 1)",
           },
         },
 
         highlights = {
-          --   -- Telescope
-          --   -- TelescopeBorder = {
-          --   --   fg = '${telescope_results}',
-          --   --   bg = '${telescope_results}',
-          --   -- },
-          --   TelescopePromptPrefix = {
-          --     fg = '${purple}',
-          --   },
-          --   TelescopePromptBorder = {
-          --     --fg = '${telescope_prompt}',
-          --     bg = '${telescope_prompt}',
-          --   },
-          --   TelescopePromptCounter = { fg = '${fg}' },
-          --   TelescopePromptNormal = { fg = '${fg}', bg = '${telescope_prompt}' },
           TelescopePromptTitle = {
             fg = '${purple}',
             bold = true,
-            --     bg = '${purple}',
           },
           TelescopePreviewTitle = {
             fg = '${purple}',
             bold = true,
-
-            --     bg = '${green}',
           },
           TelescopeResultsTitle = {
             fg = '${purple}',
             bold = true,
-            --     bg = '${telescope_results}',
           },
-          --   TelescopeMatching = { fg = '${blue}' },
-          --   TelescopeNormal = { bg = '${telescope_results}' },
-          --   TelescopeSelection = { fg = '${purple}', bg = '${telescope_selection}' },
-          --   TelescopePreviewNormal = { bg = '${telescope_preview}' },
-          --   -- TelescopePreviewBorder = { fg = '${telescope_preview}', bg = '${telescope_preview}' },
         },
         plugins = {
           -- todo: Not sure this is really needed, I think these are on by default
@@ -295,9 +268,6 @@ return {
           trouble = true,
           which_key = true,
         },
-        -- highlights = {
-        --   ["@parameter"] = { fg = "${white}" },
-        -- },
       }
       vim.cmd 'colorscheme onedark_vivid'
     end,
@@ -560,7 +530,7 @@ return {
         desc = 'Location List (Trouble)',
       },
       {
-        '<leader>xQ',
+        '<leader>xq',
         '<cmd>Trouble qflist toggle<cr>',
         desc = 'Quickfix List (Trouble)',
       },
@@ -587,11 +557,15 @@ return {
       routes = {
         {
           filter = {
+            --todo: Not sure how the "pattern" works here. Like regex?
             any = {
               { event = 'msg_show', kind = '' },
               { event = 'msg_show', find = 'E486' },
               { event = 'msg_show', find = 'line less' },
               { event = 'msg_show', find = 'yanked' },
+              { event = 'msg_show', find = 'changes?;' },
+              { event = 'msg_show', find = 'more lines?;' },
+              { event = 'msg_show', find = 'fewer lines?;' },
             },
           },
           opts = { skip = true },
@@ -631,6 +605,19 @@ return {
     'norcalli/nvim-colorizer.lua',
     config = function()
       require('colorizer').setup()
+    end,
+  },
+  {
+    's1n7ax/nvim-window-picker',
+    lazy = true,
+    main = 'window-picker',
+    config = function()
+      require('window-picker').setup {
+        picker_config = { statusline_winbar_picker = { use_winbar = 'always' } },
+      }
+      local colors = require('onedarkpro.helpers').get_preloaded_colors()
+      vim.api.nvim_set_hl(0, 'WindowPickerWinBar', { fg = colors.red, bg = colors.black })
+      vim.api.nvim_set_hl(0, 'WindowPickerWinBarNC', { fg = colors.red, bg = colors.black })
     end,
   },
 }

@@ -367,8 +367,13 @@ return {
         end
         return out
       end,
+      ---@param url string
+      follow_url_func = function(url)
+        -- Open the URL in the default web browser.
+        vim.fn.jobstart { 'open', url } -- Mac OS
+      end,
 
-      follow_url_func = vim.ui.open,
+      vim.fn.jobstart { 'open', url }, -- Mac OS
     },
   },
   {
@@ -426,27 +431,6 @@ return {
       }
     end,
   },
-  -- {
-  --   'echasnovski/mini.surround',
-  --   version = false,
-  --   config = function()
-  --     require('mini.surround').setup {
-  --       -- These are the default mappings
-  --       mappings = {
-  --         add = 'sa', -- Add surrounding in Normal and Visual modes
-  --         delete = 'sd', -- Delete surrounding
-  --         find = 'sf', -- Find surrounding (to the right)
-  --         find_left = 'sF', -- Find surrounding (to the left)
-  --         highlight = 'sh', -- Highlight surrounding
-  --         replace = 'sr', -- Replace surrounding
-  --         update_n_lines = 'sn', -- Update `n_lines`
-  --
-  --         suffix_last = 'l', -- Suffix to search with "prev" method
-  --         suffix_next = 'n', -- Suffix to search with "next" method
-  --       },
-  --     }
-  --   end,
-  -- },
   {
     'numToStr/Navigator.nvim',
     config = function()
@@ -502,7 +486,6 @@ return {
   },
   {
     'folke/trouble.nvim',
-    branch = 'dev', -- IMPORTANT!
     keys = {
       {
         '<leader>xx',
@@ -563,9 +546,11 @@ return {
               { event = 'msg_show', find = 'E486' },
               { event = 'msg_show', find = 'line less' },
               { event = 'msg_show', find = 'yanked' },
-              { event = 'msg_show', find = 'changes?;' },
-              { event = 'msg_show', find = 'more lines?;' },
-              { event = 'msg_show', find = 'fewer lines?;' },
+              { event = 'msg_show', find = 'changes;' },
+              { event = 'msg_show', find = 'more lines;' },
+              { event = 'msg_show', find = 'more line;' },
+              { event = 'msg_show', find = 'fewer lines;' },
+              { event = 'msg_show', find = 'fewer line;' },
             },
           },
           opts = { skip = true },
@@ -611,6 +596,7 @@ return {
     's1n7ax/nvim-window-picker',
     lazy = true,
     main = 'window-picker',
+    dependencies = { 'olimorris/onedarkpro.nvim' },
     config = function()
       require('window-picker').setup {
         picker_config = { statusline_winbar_picker = { use_winbar = 'always' } },
@@ -618,6 +604,23 @@ return {
       local colors = require('onedarkpro.helpers').get_preloaded_colors()
       vim.api.nvim_set_hl(0, 'WindowPickerWinBar', { fg = colors.red, bg = colors.black })
       vim.api.nvim_set_hl(0, 'WindowPickerWinBarNC', { fg = colors.red, bg = colors.black })
+    end,
+  },
+  {
+    'ptdewey/yankbank-nvim',
+    config = function()
+      require('yankbank').setup()
+    end,
+  },
+  { 'ellisonleao/glow.nvim', config = true, cmd = 'Glow' },
+  {
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
+    config = function()
+      require('nvim-surround').setup {
+        -- Configuration here, or leave empty to use defaults
+      }
     end,
   },
 }

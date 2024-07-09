@@ -1,31 +1,34 @@
 local icons = require('utils.icons').misc
-local colors = require('onedarkpro.helpers').get_colors()
-
-local theme = {
-  normal = {
-    a = { fg = colors.bg, bg = colors.green, gui = 'bold' },
-    b = { fg = colors.fg, bg = colors.gray3, gui = 'bold' },
-    c = { fg = colors.blue, bg = colors.gray2, gui = 'italic,bold' },
-    y = { fg = colors.blue, bg = colors.gray3, gui = 'bold' },
-    z = { fg = colors.bg, bg = colors.blue, gui = 'bold' },
-  },
-  command = { a = { fg = colors.bg, bg = colors.yellow, gui = 'bold' } },
-  insert = { a = { fg = colors.bg, bg = colors.blue, gui = 'bold' } },
-  visual = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
-  terminal = { a = { fg = colors.bg, bg = colors.cyan, gui = 'bold' } },
-  replace = { a = { fg = colors.bg, bg = colors.red1, gui = 'bold' } },
-  inactive = {
-    a = { fg = colors.gray1, bg = colors.bg, gui = 'bold' },
-    b = { fg = colors.gray1, bg = colors.bg },
-    c = { fg = colors.gray1, bg = colors.gray2 },
-  },
-}
-
 return {
   {
     'nvim-lualine/lualine.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+      'olimorris/onedarkpro.nvim',
+    },
     config = function()
+      local colors = require('onedarkpro.helpers').get_colors()
+
+      local theme = {
+        normal = {
+          a = { fg = colors.bg, bg = colors.green, gui = 'bold' },
+          b = { fg = colors.fg, bg = colors.gray3, gui = 'bold' },
+          c = { fg = colors.blue, bg = colors.gray2, gui = 'italic,bold' },
+          y = { fg = colors.blue, bg = colors.gray3, gui = 'bold' },
+          z = { fg = colors.bg, bg = colors.blue, gui = 'bold' },
+        },
+        command = { a = { fg = colors.bg, bg = colors.yellow, gui = 'bold' } },
+        insert = { a = { fg = colors.bg, bg = colors.blue, gui = 'bold' } },
+        visual = { a = { fg = colors.bg, bg = colors.purple, gui = 'bold' } },
+        terminal = { a = { fg = colors.bg, bg = colors.cyan, gui = 'bold' } },
+        replace = { a = { fg = colors.bg, bg = colors.red1, gui = 'bold' } },
+        inactive = {
+          a = { fg = colors.gray1, bg = colors.bg, gui = 'bold' },
+          b = { fg = colors.gray1, bg = colors.bg },
+          c = { fg = colors.gray1, bg = colors.gray2 },
+        },
+      }
+
       local clients_lsp = function()
         local clients = vim.lsp.get_active_clients()
         if next(clients) == nil then
@@ -126,6 +129,7 @@ return {
     'b0o/incline.nvim',
     event = 'VeryLazy',
     config = function()
+      local colors = require('onedarkpro.helpers').get_colors()
       local navic = require 'nvim-navic'
       require('incline').setup {
         window = {

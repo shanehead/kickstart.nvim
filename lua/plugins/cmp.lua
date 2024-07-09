@@ -1,5 +1,4 @@
 local icons = require('utils.icons').kinds
-local colors = require('onedarkpro.helpers').get_colors()
 
 local lspkind_opts = {
   mode = 'symbol',
@@ -14,16 +13,6 @@ local lspkind_opts = {
     emoji = '(Emoji)',
     omni = '(Omni)',
   },
-}
-
-local hlgroups = {
-  CmpItemAbbr = { fg = colors.white },
-  CmpItemAbbrMatch = { fg = colors.blue, bold = true },
-  CmpDoc = { bg = colors.darker_black },
-  CmpDocBorder = { fg = colors.darker_black, bg = colors.darker_black },
-  CmpBorder = { fg = colors.darker_black, bg = colors.darker_black },
-  CmpPmenu = { bg = colors.darker_black },
-  CmpSel = { bg = colors.selection, bold = true },
 }
 
 return {
@@ -62,6 +51,7 @@ return {
         build = ':Codeium Auth',
         opts = {},
       },
+      'olimorris/onedarkpro.nvim',
       'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-nvim-lsp',
@@ -73,6 +63,17 @@ return {
       local luasnip = require 'luasnip'
       local lspkind = require 'lspkind'
       luasnip.config.setup {}
+
+      local colors = require('onedarkpro.helpers').get_colors()
+      local hlgroups = {
+        CmpItemAbbr = { fg = colors.white },
+        CmpItemAbbrMatch = { fg = colors.blue, bold = true },
+        CmpDoc = { bg = colors.darker_black },
+        CmpDocBorder = { fg = colors.darker_black, bg = colors.darker_black },
+        CmpBorder = { fg = colors.darker_black, bg = colors.darker_black },
+        CmpPmenu = { bg = colors.darker_black },
+        CmpSel = { bg = colors.selection, bold = true },
+      }
 
       local function has_words_before()
         local line, col = (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
@@ -145,6 +146,7 @@ return {
           -- scroll the documentation window [b]ack / [f]orward
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<CR>'] = cmp.mapping.confirm { select = true }, -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
 
           -- For more advanced luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps

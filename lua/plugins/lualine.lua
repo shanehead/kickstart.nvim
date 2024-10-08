@@ -76,7 +76,7 @@ return {
             },
             {
               'diff',
-              symbols = { added = icons.GitAdd, modified = icons.GitChange, removed = icons.GitDelete },
+              symbols = { added = icons.GitAdd .. ' ', modified = icons.GitChange .. ' ', removed = icons.GitDelete .. ' ' },
               colored = true,
             },
           },

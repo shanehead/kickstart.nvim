@@ -40,13 +40,17 @@ return {
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
+
+    config = function()
       require('which-key').setup {
         icons = {
-          group = '', -- symbol prepended to a group
+          group = '▪️', -- symbol prepended to a group
+          colors = true,
         },
-        window = {
-          winblend = 5,
+        win = {
+          wo = {
+            winblend = 5,
+          },
         },
       }
     end,
@@ -116,58 +120,25 @@ return {
     version = '^4',
     ft = { 'rust' },
   },
-  {
-    'Saecki/crates.nvim',
-    event = { 'BufRead Cargo.toml' },
-    init = function()
-      vim.api.nvim_create_autocmd('BufRead', {
-        group = vim.api.nvim_create_augroup('CmpSourceCargo', { clear = true }),
-        pattern = 'Cargo.toml',
-        callback = function()
-          require('cmp').setup.buffer { sources = { { name = 'crates' } } }
-          require 'crates'
-        end,
-      })
-    end,
-    opts = {
-      null_ls = {
-        enabled = true,
-        name = 'crates.nvim',
-      },
-    },
-  },
-  {
-    'nvim-neotest/neotest',
-    optional = true,
-    opts = function(_, opts)
-      if not opts.adapters then
-        opts.adapters = {}
-      end
-      local rustaceanvim_avail, rustaceanvim = pcall(require, 'rustaceanvim.neotest')
-      if rustaceanvim_avail then
-        table.insert(opts.adapters, rustaceanvim)
-      end
-    end,
-  },
-  {
-    'lukas-reineke/headlines.nvim',
-    dependencies = 'nvim-treesitter/nvim-treesitter',
-    config = function()
-      require('headlines').setup {
-        markdown = {
-          headline_highlights = { 'Headline1', 'Headline2', 'Headline3', 'Headline4' },
-          fat_headlines = true,
-          fat_headline_upper_string = '▃',
-          fat_headline_lower_string = '',
-        },
-      }
-      vim.api.nvim_set_hl(0, 'Headline1', { fg = '#6893bf', bg = '#2b3d4f', italic = true, bold = true })
-      vim.api.nvim_set_hl(0, 'Headline2', { fg = '#80a665', bg = '#3d4f2f', italic = false, bold = true })
-      vim.api.nvim_set_hl(0, 'Headline3', { fg = '#4c9a91', bg = '#224541', italic = false })
-      vim.api.nvim_set_hl(0, 'Headline4', { fg = '#c99076', bg = '#66493c', italic = false })
-      vim.api.nvim_set_hl(0, 'CodeBlock', { bg = '#444444' })
-    end,
-  },
+  -- {
+  --   'lukas-reineke/headlines.nvim',
+  --   dependencies = 'nvim-treesitter/nvim-treesitter',
+  --   config = function()
+  --     require('headlines').setup {
+  --       markdown = {
+  --         headline_highlights = { 'Headline1', 'Headline2', 'Headline3', 'Headline4' },
+  --         fat_headlines = true,
+  --         fat_headline_upper_string = '▃',
+  --         fat_headline_lower_string = '',
+  --       },
+  --     }
+  --     vim.api.nvim_set_hl(0, 'Headline1', { fg = '#6893bf', bg = '#2b3d4f', italic = true, bold = true })
+  --     vim.api.nvim_set_hl(0, 'Headline2', { fg = '#80a665', bg = '#3d4f2f', italic = false, bold = true })
+  --     vim.api.nvim_set_hl(0, 'Headline3', { fg = '#4c9a91', bg = '#224541', italic = false })
+  --     vim.api.nvim_set_hl(0, 'Headline4', { fg = '#c99076', bg = '#66493c', italic = false })
+  --     vim.api.nvim_set_hl(0, 'CodeBlock', { bg = '#444444' })
+  --   end,
+  -- },
   {
     'nvim-neo-tree/neo-tree.nvim',
     opts = {
@@ -222,159 +193,6 @@ return {
         pre_save_cmds = { 'Neotree close' },
       }
     end,
-  },
-  {
-    'olimorris/onedarkpro.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      require('onedarkpro').setup {
-        styles = {
-          comments = 'italic',
-          keywords = 'bold,italic',
-          functions = 'bold,italic',
-          parameters = 'bold',
-        },
-        colors = {
-          onedark_vivid = {
-            bg = '#0c121c',
-          },
-        },
-
-        highlights = {
-          TelescopePromptTitle = {
-            fg = '${purple}',
-            bold = true,
-          },
-          TelescopePreviewTitle = {
-            fg = '${purple}',
-            bold = true,
-          },
-          TelescopeResultsTitle = {
-            fg = '${purple}',
-            bold = true,
-          },
-        },
-        plugins = {
-          -- todo: Not sure this is really needed, I think these are on by default
-          telescope = true,
-          nvim_cmp = true,
-          lsp_semantic_tokens = true,
-          neotest = true,
-          neo_tree = true,
-          nvim_dap = true,
-          nvim_dap_ui = true,
-          nvim_lsp = true,
-          trouble = true,
-          which_key = true,
-        },
-      }
-      vim.cmd 'colorscheme onedark_vivid'
-    end,
-  },
-  {
-    'epwalsh/obsidian.nvim',
-    -- the obsidian vault in this default config  ~/obsidian-vault
-    -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand':
-    -- event = { "bufreadpre " .. vim.fn.expand "~" .. "/my-vault/**.md" },
-    event = {
-
-      'BufReadPre ' .. vim.fn.expand '~' .. '/Documents/Obsidian/**.md',
-      'BufNewFile ' .. vim.fn.expand '~' .. '/Documents/Obsidian/**.md',
-      'BufReadPre ' .. vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian/**.md',
-      'BufNewFile ' .. vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian/**.md',
-    },
-    keys = {
-      {
-        'gf',
-        function()
-          if require('obsidian').util.cursor_on_markdown_link() then
-            return '<cmd>ObsidianFollowLink<CR>'
-          else
-            return 'gf'
-          end
-        end,
-        noremap = false,
-        expr = true,
-      },
-    },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'hrsh7th/nvim-cmp',
-      'nvim-telescope/telescope.nvim',
-    },
-    opts = {
-      --dir = vim.env.HOME .. '/Documents/Obsidian', -- specify the vault location. no need to call 'vim.fn.expand' here
-      dir = vim.fn.expand '~' .. '/Library/Mobile Documents/iCloud~md~obsidian/Documents/Obsidian',
-      use_advanced_uri = true,
-      finder = 'telescope.nvim',
-      mappings = {},
-
-      templates = {
-        subdir = 'templates',
-        date_format = '%Y-%m-%d-%a',
-        time_format = '%H:%M',
-      },
-      ui = {
-        enable = true, -- set to false to disable all additional syntax features
-        update_debounce = 200, -- update delay after a text change (in milliseconds)
-        -- Define how various check-boxes are displayed
-        checkboxes = {
-          -- NOTE: the 'char' value has to be a single character, and the highlight groups are defined below.
-          [' '] = { char = '󰄱', hl_group = 'ObsidianTodo' },
-          ['x'] = { char = '', hl_group = 'ObsidianDone' },
-          ['>'] = { char = '', hl_group = 'ObsidianRightArrow' },
-          ['~'] = { char = '󰰱', hl_group = 'ObsidianTilde' },
-          -- Replace the above with this if you don't have a patched font:
-          -- [" "] = { char = "☐", hl_group = "ObsidianTodo" },
-          -- ["x"] = { char = "✔", hl_group = "ObsidianDone" },
-
-          -- You can also add more custom ones...
-        },
-        -- Use bullet marks for non-checkbox lists.
-        bullets = { char = '•', hl_group = 'ObsidianBullet' },
-        external_link_icon = { char = '', hl_group = 'ObsidianExtLinkIcon' },
-        -- Replace the above with this if you don't have a patched font:
-        -- external_link_icon = { char = "", hl_group = "ObsidianExtLinkIcon" },
-        reference_text = { hl_group = 'ObsidianRefText' },
-        highlight_text = { hl_group = 'ObsidianHighlightText' },
-        tags = { hl_group = 'ObsidianTag' },
-        block_ids = { hl_group = 'ObsidianBlockID' },
-        hl_groups = {
-          -- The options are passed directly to `vim.api.nvim_set_hl()`. See `:help nvim_set_hl`.
-          ObsidianTodo = { bold = true, fg = '#f78c6c' },
-          ObsidianDone = { bold = true, fg = '#89ddff' },
-          ObsidianRightArrow = { bold = true, fg = '#f78c6c' },
-          ObsidianTilde = { bold = true, fg = '#ff5370' },
-          ObsidianBullet = { bold = true, fg = '#89ddff' },
-          ObsidianRefText = { underline = true, fg = '#c792ea' },
-          ObsidianExtLinkIcon = { fg = '#c792ea' },
-          ObsidianTag = { italic = true, fg = '#89ddff' },
-          ObsidianBlockID = { italic = true, fg = '#89ddff' },
-          ObsidianHighlightText = { bg = '#75662e' },
-        },
-      },
-
-      note_frontmatter_func = function(note)
-        -- This is equivalent to the default frontmatter function.
-        local out = { id = note.id, aliases = note.aliases, tags = note.tags }
-        -- `note.metadata` contains any manually added fields in the frontmatter.
-        -- So here we just make sure those fields are kept in the frontmatter.
-        if note.metadata ~= nil and require('obsidian').util.table_length(note.metadata) > 0 then
-          for k, v in pairs(note.metadata) do
-            out[k] = v
-          end
-        end
-        return out
-      end,
-      ---@param url string
-      follow_url_func = function(url)
-        -- Open the URL in the default web browser.
-        vim.fn.jobstart { 'open', url } -- Mac OS
-      end,
-
-      vim.fn.jobstart { 'open', url }, -- Mac OS
-    },
   },
   {
     'kdheepak/lazygit.nvim',
@@ -622,5 +440,48 @@ return {
         -- Configuration here, or leave empty to use defaults
       }
     end,
+  },
+  {
+    'OXY2DEV/markview.nvim',
+    lazy = false, -- Recommended
+    -- ft = "markdown" -- If you decide to lazy-load anyway
+
+    dependencies = {
+      -- You will not need this if you installed the
+      -- parsers manually
+      -- Or if the parsers are in your $RUNTIMEPATH
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      local presets = require 'markview.presets'
+      require('markview').setup {
+        headings = presets.headings.glow,
+        checkboxes = presets.checkboxes.nerd,
+        --tables = presets.tables.border_single,
+        modes = { 'n', 'no', 'c', 'i' }, -- Change these modes
+        -- to what you need
+
+        hybrid_modes = { 'n', 'i' }, -- Uses this feature on
+        -- normal mode
+
+        -- This is nice to have
+        callbacks = {
+          on_enable = function(_, win)
+            vim.wo[win].conceallevel = 2
+            vim.wo[win].concealcursor = 'nc'
+          end,
+        },
+      }
+    end,
+  },
+  {
+    'folke/lazydev.nvim',
+    ft = 'lua', -- only load on lua files
+    opts = {
+      library = {
+        { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+      },
+    },
   },
 }

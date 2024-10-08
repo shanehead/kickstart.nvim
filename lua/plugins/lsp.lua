@@ -12,7 +12,7 @@ return { -- LSP Configuration & Plugins
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim', opts = {} },
+      -- { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
       --  This function gets run when an LSP attaches to a particular buffer.
@@ -102,7 +102,7 @@ return { -- LSP Configuration & Plugins
                 callSnippet = 'Replace',
               },
               -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -138,5 +138,25 @@ return { -- LSP Configuration & Plugins
         },
       }
     end,
+  },
+  {
+    'Saecki/crates.nvim',
+    event = { 'BufRead Cargo.toml' },
+    init = function()
+      vim.api.nvim_create_autocmd('BufRead', {
+        group = vim.api.nvim_create_augroup('CmpSourceCargo', { clear = true }),
+        pattern = 'Cargo.toml',
+        callback = function()
+          require('cmp').setup.buffer { sources = { { name = 'crates' } } }
+          require 'crates'
+        end,
+      })
+    end,
+    opts = {
+      null_ls = {
+        enabled = true,
+        name = 'crates.nvim',
+      },
+    },
   },
 }

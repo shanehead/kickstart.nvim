@@ -1,17 +1,62 @@
 return {
+  { 'mfussenegger/nvim-dap' },
+  {
+    'rcarriga/nvim-dap-ui',
+    dependencies = 'mfussenegger/nvim-dap',
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.after.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.after.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+    end,
+  },
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function(_)
+      local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
+      require('dap-python').setup(path)
+    end,
+  },
+
   {
     'nvim-neotest/neotest',
-    ft = { 'rust', 'python' },
+    ft = { 'rust', 'python', 'go' },
     dependencies = {
       'nvim-neotest/nvim-nio',
+      'nvim-lua/plenary.nvim',
+      'mfussenegger/nvim-dap',
+      'mfussenegger/nvim-dap-python',
+      'antoinemadec/FixCursorHold.nvim',
       'nvim-treesitter/nvim-treesitter',
       'nvim-neotest/neotest-python',
-      {
-        'folke/neodev.nvim',
-        opts = {},
-      },
+      'nvim-neotest/neotest-go',
+      --   {
+      --     'folke/neodev.nvim',
+      --     opts = {},
+      --   },
     },
-    opts = function()
+    opts = function(_, opts)
+      if not opts.adapters then
+        opts.adapters = {}
+      end
+      local rustaceanvim_avail, rustaceanvim = pcall(require, 'rustaceanvim.neotest')
+      if rustaceanvim_avail then
+        table.insert(opts.adapters, rustaceanvim)
+      end
+
       return {
         -- your neotest config here
         log_level = vim.log.levels.INFO,

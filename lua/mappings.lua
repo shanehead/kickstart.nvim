@@ -14,6 +14,12 @@ local maps = {
     { '|', '<cmd>vsplit<cr>', desc = 'Vertical Split' },
     { '\\', '<cmd>split<cr>', desc = 'Horizontal Split' },
 
+    -- Sizing windows
+    { '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' } },
+    { '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' } },
+    { '<C-Left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width' } },
+    { '<C-Right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' } },
+
     -- Buffers
     { '<leader>b', group = 'Buffers', icon = { icon = icons.Tab, color = 'green' } },
     { '<leader>bc', '<cmd>bd|e#<cr>', desc = 'Close other buffers' },

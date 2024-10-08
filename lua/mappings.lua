@@ -9,22 +9,26 @@ local maps = {
     { 'gb', '<C-t>', desc = 'Go Back (Previous Tag)' },
 
     { '<leader>q', '<cmd>confirm qa<cr>', desc = 'Quit' },
-
     { '<leader>w', '<cmd>w<cr>', desc = 'Save', icon = icons.Save },
+
+    -- Clear search on esc
+    { '<esc>', '<cmd>noh<cr><esc>', desc = 'Escape and Clear hlsearch' },
+
+    -- Sizing windows
     { '|', '<cmd>vsplit<cr>', desc = 'Vertical Split' },
     { '\\', '<cmd>split<cr>', desc = 'Horizontal Split' },
 
-    -- Sizing windows
-    { '<C-Up>', '<cmd>resize +2<cr>', { desc = 'Increase Window Height' } },
-    { '<C-Down>', '<cmd>resize -2<cr>', { desc = 'Decrease Window Height' } },
-    { '<C-Left>', '<cmd>vertical resize -2<cr>', { desc = 'Decrease Window Width' } },
-    { '<C-Right>', '<cmd>vertical resize +2<cr>', { desc = 'Increase Window Width' } },
+    { '<C-Up>', '<cmd>resize +2<cr>', desc = 'Increase Window Height' },
+    { '<C-Down>', '<cmd>resize -2<cr>', desc = 'Decrease Window Height' },
+    { '<C-Left>', '<cmd>vertical resize -2<cr>', desc = 'Decrease Window Width' },
+    { '<C-Right>', '<cmd>vertical resize +2<cr>', desc = 'Increase Window Width' },
 
     -- Buffers
     { '<leader>b', group = 'Buffers', icon = { icon = icons.Tab, color = 'green' } },
     { '<leader>bc', '<cmd>bd|e#<cr>', desc = 'Close other buffers' },
     --{'<leader>bb', '<cmd>BufferLinePick<cr>', 'Pick Buffer' },
     { '<Tab>', '<cmd>bnext<cr>', desc = 'Next buffer' },
+
     { '<S-Tab>', '<cmd>bprevious<cr>', desc = 'Previous buffer' },
 
     -- Tabs
@@ -351,14 +355,5 @@ for mode, keymaps in pairs(maps) do
       registration.icon = { icon = registration.icon, color = 'blue' }
     end
     wk.add(keymap)
-    -- if keymap.name then
-    --   local registration = {}
-    --   registration[keymap] = opts
-    --   wk.register(registration, { mode = mode })
-    -- else
-    --   local cmd = opts[1]
-    --   local description = opts.desc
-    --   vim.keymap.set(mode, keymap, cmd, { desc = description })
-    -- end
   end
 end

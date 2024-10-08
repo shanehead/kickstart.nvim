@@ -5,7 +5,7 @@ local lspkind_opts = {
   symbol_map = icons,
   menu = {
     nvim_lsp = '(LSP)',
-    codeium = '(Codeium)',
+    -- codeium = '(Codeium)',
     ultisnips = '(US)',
     nvim_lua = '(Lua)',
     path = '(Path)',
@@ -45,12 +45,12 @@ return {
           end
         end,
       },
-      {
-        'Exafunction/codeium.nvim',
-        cmd = 'Codeium',
-        build = ':Codeium Auth',
-        opts = {},
-      },
+      -- {
+      --   'Exafunction/codeium.nvim',
+      --   cmd = 'Codeium',
+      --   build = ':Codeium Auth',
+      --   opts = {},
+      -- },
       'olimorris/onedarkpro.nvim',
       'saadparwaiz1/cmp_luasnip',
       'hrsh7th/cmp-buffer',
